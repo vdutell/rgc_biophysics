@@ -34,13 +34,16 @@ siclamp.dur = 1000 // units ms
 siclamp.del = 50 // units ms
 
 
-// Patch on dendrites
+//patch on dendrites
+objref thisone, diclamp
 
-//objref diclamp
-//dend[90] diclamp = new IClamp(0.5)
-//diclamp.amp = 0 // units nA
-//diclamp.dur = 0 // units ms
-//diclamp.del = 0 // units ms
+forsec basal {
+	thisone = new SectionRef()
+	thisone diclamp = new IClamp(1)
+	diclamp.amp = 0 // units n
+	diclamp.dur = 0 // units ms
+	diclamp.del = 0 // units ms
+}
 
 //Run parameters
 dt = 0.001
@@ -67,14 +70,16 @@ func calc_sin() {
 proc advance() {
  	fadvance()
  	delay_time = t-siclamp.del
- 	forsec dend.all for i=0,n3d()-1{
-		dendpos = x3d(i)
-		siclamp.amp = ampl+ampl*calc_sin(delay_time,dendpos)
-	}
+
+
+forall {
+   print secname()
+   for i=0,n3d()-1 print i, x3d(i), y3d(i), z3d(i), diam3d(i)
+}
+
+//			siclamp.amp = ampl+ampl*calc_sin(delay_time,dendpos)
 
  }
-
-
 
 
 proc pp() {
@@ -85,7 +90,6 @@ proc pp() {
 	for i=1,3{
 		//change morphology
 		soma.diam = i*2
-
 
 		init()
 		advance()
