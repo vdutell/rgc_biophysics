@@ -41,7 +41,7 @@ forsec basal {
 	thisone = new SectionRef()
 	thisone diclamp = new IClamp(1)
 	diclamp.amp = 0 // units n
-	diclamp.dur = 0 // units ms
+	diclamp.dur = 1000 // units ms
 	diclamp.del = 0 // units ms
 }
 
@@ -55,13 +55,14 @@ func calc_sin() {
 	time_ms = $1
 	xpos_mm = $2
 
-	temp_fq_ms = temp_fq/1000 //convert temp fq from hz to cyc per ms
+	temp_fq_ms = temp_fq_sec/1000 //convert temp fq from hz to cyc per ms
 	cat_mmpdeg = 0.218 // vis_ang for cat: 1 deg = 0.218mm (Visual Perception: The Neurophysiological Foundations)
-	spac_fq_mm = spac_fq/cat_mmpdegz //convert spat fq from cpd to cyc per mm
+	spac_fq_mm = spac_fq_deg/cat_mmpdeg //convert spat fq from cpd to cyc per mm
 
 	fx = xpos_mm/spac_fq_mm //spatial frequency component
 	wt = time_ms/temp_fq_ms //temporal frequency component
-	res = sin(2*PI*(fx+wt)) //calculate sine wave
+	res = sin(2*PI*(fx-wt)) //calculate sine wave
+	//res = sin(2*PI*xpos_mm-(wt)*spac_fq_mm)
 
 	return(res)
 }
@@ -69,22 +70,19 @@ func calc_sin() {
 
 proc advance() {
  	fadvance()
- 	delay_time = t-siclamp.del
+ 	time_delayed = t-siclamp.del
 
-
-forall {
-   print secname()
-   for i=0,n3d()-1 print i, x3d(i), y3d(i), z3d(i), diam3d(i)
+ 	basal for i=0,n3d()-1{
+ 		xcoord = x3d(i)
+ 		sine_val = calc_sin(t,xcoord)
+ 		dend[i] diclamp.amp = ampl+ampl*sine_val
+ 	}	
 }
-
-//			siclamp.amp = ampl+ampl*calc_sin(delay_time,dendpos)
-
- }
 
 
 proc pp() {
-	temp_fq = $1 //fq in hz
-	spac_fq = $2 //fq in cpd
+	temp_fq_sec = $1 //fq in hz
+	spac_fq_deg = $2 //fq in cpd
 	ampl = $3
 
 	for i=1,3{
@@ -94,24 +92,6 @@ proc pp() {
 		init()
 		advance()
 		run()
-
 	}
 }
-
-
-
-
-
-
-//proc rm_dist_cx() {
-	// for i=0,distal.count()-1 {
-//	forsec distal {
-//		nseg = 1
-//		gkbar_hh = 0
-//		gnabar_hh = 0
-//		gl_hh = 0
-//		el_hh = 0
-//		// psection()
-//	}
-//}
 
