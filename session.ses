@@ -1,17 +1,18 @@
 {load_file("nrngui.hoc")}
 objectvar save_window_, rvp_
-objectvar scene_vector_[5]
+objectvar scene_vector_[4]
 objectvar ocbox_, ocbox_list_, scene_, scene_list_
 {ocbox_list_ = new List()  scene_list_ = new List()}
 {pwman_place(0,0,0)}
 {
-save_window_ = new PlotShape(0)
-save_window_.size(-153.869,245.564,-161.363,188.758)
-save_window_.variable("v")
-scene_vector_[3] = save_window_
-{save_window_.view(-153.869, -161.363, 399.433, 350.12, 457, 0, 337.92, 296.32)}
-fast_flush_list.append(save_window_)
-save_window_.save_name("fast_flush_list.")
+save_window_ = new Graph(0)
+save_window_.size(0,500,-125.392,65.691)
+scene_vector_[2] = save_window_
+{save_window_.view(0, -125.392, 100, 191.083, 35, 8, 1262.4, 310.72)}
+graphList[0].append(save_window_)
+save_window_.save_name("graphList[0].")
+save_window_.addexpr("v(.5)", 1, 1, 0.8, 0.9, 2)
+save_window_.addexpr("axon.v( 0.00140449 )", 2, 1, 0.8, 0.9, 2)
 }
 {
 xpanel("RunControl", 0)
@@ -24,9 +25,9 @@ xvalue("Continue til","runStopAt", 1,"{continuerun(runStopAt) stoprun=1}", 1, 1 
 runStopIn = 1
 xvalue("Continue for","runStopIn", 1,"{continuerun(t + runStopIn) stoprun=1}", 1, 1 )
 xbutton("Single Step","steprun()")
-t = 0
+t = 329.36
 xvalue("t","t", 2 )
-tstop = 5
+tstop = 100
 xvalue("Tstop","tstop", 1,"tstop_changed()", 0, 1 )
 dt = 0.025
 xvalue("dt","dt", 1,"setdt()", 0, 1 )
@@ -34,21 +35,20 @@ steps_per_ms = 40
 xvalue("Points plotted/ms","steps_per_ms", 1,"setdt()", 0, 1 )
 screen_update_invl = 0.05
 xvalue("Scrn update invl","screen_update_invl", 1,"", 0, 1 )
-realtime = 0
+realtime = 60.27
 xvalue("Real Time","realtime", 0,"", 0, 1 )
-xpanel(19,466)
+xpanel(379,0)
 }
 {
-save_window_ = new Graph(0)
-save_window_.size(0,1000,-80,40)
-scene_vector_[4] = save_window_
-{save_window_.view(0, -80, 1000, 120, 13, 81, 462.72, 335.68)}
-graphList[0].append(save_window_)
-save_window_.save_name("graphList[0].")
-save_window_.addexpr("v(.5)", 1, 1, 0.8, 0.9, 2)
-save_window_.addexpr("axon.v( 0.5 )", 2, 1, 0.8, 0.9, 2)
-save_window_.addexpr("axon.v( 0.5 )", 3, 1, 0.8, 0.9, 2)
-save_window_.addexpr("dend[90].v( 0.5 )", 7, 1, 0.8, 0.9, 2)
+save_window_ = new PlotShape(0)
+save_window_.size(-271.108,495.808,-148.381,176.805)
+save_window_.variable("v")
+scene_vector_[3] = save_window_
+{save_window_.view(-271.108, -148.381, 766.917, 325.186, 345, 365, 1033.92, 438.4)}
+fast_flush_list.append(save_window_)
+save_window_.exec_menu("Show Diam")
+save_window_.exec_menu("Shape Plot") // v depicted via colormap
+save_window_.save_name("fast_flush_list.")
 }
 objectvar scene_vector_[1]
 {doNotify()}

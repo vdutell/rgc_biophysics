@@ -1,37 +1,15 @@
-//load_file("rgcsubsets.hoc")  //loads and runs everything (unless its a function
-//load_file("rgc_somatic.hoc")
-load_file("rgc.hoc")
-//load_file("rgc_soma2x.hoc")
-
-load_file("session.ses") //load session, where windows are, etc.
-
-//xopen("run_cell.hoc") // to re-load this file.
-
-// we have loaded up a multicomartment cell, so use formal go to through all compartments.
-// for all compartments, insert Hodgkin and hugely dynamics
-// .mod files have all of the information and equations for ion channels
-// .mod files are present on modeled, so you can just use those.
-// hh.mod file contains the hodgekin hugely equations
-
-proc hhinsert(){
-	g_na = $1
-	forall insert hh
-		g_k = 0.1
-		soma.gnabar_hh = g_na
-		soma.gk_hh = g_k
-		//soma psection() //need to tell section which section you want
-}
-
-hhinsert(0.1)
-soma psection()
+//Run parameters
+dt = 0.001
+tstop = 1000
+dly = 10
 
 
 // Patch on soma
 objref siclamp
 soma siclamp = new IClamp(1)
 siclamp.amp = 0 // units n
-siclamp.dur = 1000 // units ms
-siclamp.del = 50 // units ms
+siclamp.dur = tstop // units ms
+siclamp.del = dly // units ms
 
 
 //patch on dendrites
@@ -41,28 +19,27 @@ forsec basal {
 	thisone = new SectionRef()
 	thisone diclamp = new IClamp(1)
 	diclamp.amp = 0 // units n
-	diclamp.dur = 1000 // units ms
-	diclamp.del = 0 // units ms
+	diclamp.dur = tstop // units ms
+	diclamp.del = dly // units ms
 }
 
-//Run parameters
-dt = 0.001
-tstop = 1000
+
 
 
 //calc sine wave stimulation as a fucntion of position and time
 func calc_sin() {
 	time_ms = $1
-	xpos_mm = $2
+	xpos_um = $2
+	xpos_mm = xpos_um/1000
 
 	temp_fq_ms = temp_fq_sec/1000 //convert temp fq from hz to cyc per ms
 	cat_mmpdeg = 0.218 // vis_ang for cat: 1 deg = 0.218mm (Visual Perception: The Neurophysiological Foundations)
 	spac_fq_mm = spac_fq_deg/cat_mmpdeg //convert spat fq from cpd to cyc per mm
 
-	fx = xpos_mm/spac_fq_mm //spatial frequency component
-	wt = time_ms/temp_fq_ms //temporal frequency component
-	res = sin(2*PI*(fx-wt)) //calculate sine wave
-	//res = sin(2*PI*xpos_mm-(wt)*spac_fq_mm)
+	fx = xpos_mm*spac_fq_mm //spatial frequency component
+	wt = 1 //time_ms*temp_fq_ms //temporal frequency component
+	res = sin(fx+wt) //calculate sine wave
+	//res = sin(xpos_mm-(wt)*spac_fq_mm)
 
 	return(res)
 }
@@ -73,8 +50,8 @@ proc advance() {
  	time_delayed = t-siclamp.del
 
  	basal for i=0,n3d()-1{
- 		xcoord = x3d(i)
- 		sine_val = calc_sin(t,xcoord)
+ 		xcoord = -1*x3d(i)
+ 		sine_val = 1//calc_sin(t,xcoord)
  		dend[i] diclamp.amp = ampl+ampl*sine_val
  	}	
 }
@@ -85,13 +62,13 @@ proc pp() {
 	spac_fq_deg = $2 //fq in cpd
 	ampl = $3
 
-	for i=1,3{
-		//change morphology
-		soma.diam = i*2
+	//for i=1,3{
+	//change morphology
+	//	soma.diam = i*2
 
-		init()
-		advance()
-		run()
-	}
+	init()
+	advance()
+	run()
+	
 }
 
