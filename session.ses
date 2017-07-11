@@ -1,4 +1,4 @@
-tstop_val = 50
+tstop_val = 500
 
 
 {load_file("nrngui.hoc")}

@@ -1185,31 +1185,37 @@ proc basic_shape() {
   shape3d_5()
 }
 
-objref all, somatic, dends //, bdends, ddends
+objref all, somatic, dends, bdends, ddends
 proc subsets() { local i
 
-  //objref all, somatic, dends
-  all = new SectionList()
-    soma all.append()
-    for i=0, 90 dend[i] all.append()
+	all = new SectionList()
+	soma all.append()
+	for i=0, 90 dend[i] all.append()
 
-  somatic = new SectionList()
-    soma somatic.append()
+	access soma
+	x_soma = x3d(0)
+	y_soma = y3d(0)
 
-  dends = new SectionList()
-    for i=0, 90 dend[i] dends.append()
+	somatic = new SectionList()
+	soma somatic.append()
 
-	//bdends = new SectionList()
-	//ddends = new SectionList()
+	dends = new SectionList()
+	for i=0, 90{
+		dend[i] dends.append()
+	}
 
-	//dends for i=0,90{
-	//	xdist = x3d(i) - x_soma
-	//	ydist = y3d(i) - y_soma
-	//	tdist = (xdist^2+ydist^2)^(0.5)
+	bdends = new SectionList()
+	ddends = new SectionList()
 
-	//	if(tdist < 50){dend[i] bdends.append()
-	//	}else{dend[i] ddends.append()}
-	//}
+
+	dends for i=0,n3d()-1{
+ 		xdist = x3d(i) - x_soma
+ 		ydist = y3d(i) - y_soma
+ 		tdist = (xdist^2+ydist^2)^(0.5)
+		if(tdist < 50){dend[i] bdends.append()
+		}else{dend[i] ddends.append()}
+	}
+
 }
 
 
