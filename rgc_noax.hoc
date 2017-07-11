@@ -1055,12 +1055,12 @@ proc shape3d_4() {
 	pt3dadd(19.34, -174.61, -22.09, 2.05)
   }
 }
-proc shape3d_5() {
+ proc shape3d_5() {
   dend[84] {	pt3dadd(12.6, -180.76, -22.09, 2.05)
 	pt3dadd(12.89, -194.82, -22.09, 2.05)
 	pt3dadd(13.18, -195.7, -22.09, 2.05)
 	pt3dadd(16.98, -202.15, -22.09, 2.05)
-  }
+}
   dend[85] {pt3dclear()
 	pt3dadd(11.43, -29.59, -21.09, 2.05)
 	pt3dadd(2.34, -31.35, -22.09, 2.05)
@@ -1185,9 +1185,10 @@ proc basic_shape() {
   shape3d_5()
 }
 
-objref all, somatic, basal
+objref all, somatic, dends //, bdends, ddends
 proc subsets() { local i
-  objref all, somatic, basal
+
+  //objref all, somatic, dends
   all = new SectionList()
     soma all.append()
     for i=0, 90 dend[i] all.append()
@@ -1195,16 +1196,30 @@ proc subsets() { local i
   somatic = new SectionList()
     soma somatic.append()
 
-  basal = new SectionList()
-    for i=0, 90 dend[i] basal.append()
+  dends = new SectionList()
+    for i=0, 90 dend[i] dends.append()
 
+	//bdends = new SectionList()
+	//ddends = new SectionList()
+
+	//dends for i=0,90{
+	//	xdist = x3d(i) - x_soma
+	//	ydist = y3d(i) - y_soma
+	//	tdist = (xdist^2+ydist^2)^(0.5)
+
+	//	if(tdist < 50){dend[i] bdends.append()
+	//	}else{dend[i] ddends.append()}
+	//}
 }
+
+
 proc geom() {
 }
 proc geom_nseg() {
 }
 proc biophys() {
 }
-access soma
 
 celldef()
+
+access soma

@@ -1,6 +1,5 @@
 load_file("rgc_noax.hoc")
-
-//load_file("rgc_conduct.hoc")
+load_file("rgc_conduct.hoc")
 
 load_file("session.ses")
 

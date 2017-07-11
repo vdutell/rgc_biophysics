@@ -29,6 +29,7 @@ gnabar_spike = 0.0608
 }
 
 soma {
+//diam = 22.008
 gcabar_spike = 0.00223
 gkbar_spike = 0.0361
 gabar_spike = 0.054
