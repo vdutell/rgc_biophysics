@@ -1212,7 +1212,7 @@ proc subsets() { local i
  		xdist = x3d(i) - x_soma
  		ydist = y3d(i) - y_soma
  		tdist = (xdist^2+ydist^2)^(0.5)
-		if(tdist < 50){dend[i] bdends.append()
+		if(tdist < 10){dend[i] bdends.append()
 		}else{dend[i] ddends.append()}
 	}
 

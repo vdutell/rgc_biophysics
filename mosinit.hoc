@@ -1,6 +1,12 @@
-load_file("rgc_noax.hoc")
+//load_file("rgc_alpha_noax.hoc")
+
+load_file("rgc_beta_noax.hoc")
+
+
 load_file("rgc_conduct.hoc")
 
 load_file("session.ses")
 
 load_file("run_cell.hoc")
+
+if(0){forall ddends delete_section()}

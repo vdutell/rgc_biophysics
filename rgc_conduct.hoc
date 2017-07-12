@@ -20,10 +20,13 @@ global_ra=110
 
 celsius=35
 
-for i = 0, 91-1 dend[i] {
+
+segsize = 0
+forsec dends segsize+=1
+
+for i = 0,segsize-1 dend[i] {
 gcabar_spike = 0.00223
-gkbar_spike = 0.0412
-gabar_spike = 0.036
+gkbar_spike = 0.0412gabar_spike = 0.036
 gkcbar_spike = 0.000001
 gnabar_spike = 0.0608
 }

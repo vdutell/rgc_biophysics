@@ -13,8 +13,6 @@ siclamp.del = dly // units ms
 
 
 //patch on dendrites
-segsize = 0
-forsec dends segsize+=1
 objref thisone, diclamp[segsize]
 id = 0
 
@@ -46,6 +44,10 @@ func calc_sin() {
 }
 
 
+//proc init(){
+//	Iin = 0
+//}
+
 proc advance() {
  	fadvance()
  	time_delayed = t-siclamp.del
@@ -54,9 +56,12 @@ proc advance() {
  		xcoord = x3d(i)
  		sine_val = calc_sin(xcoord,t)
  		dend[i] diclamp.amp = ampl+ampl*sine_val
+ 		
  	}	
+ 	Iin = ampl+ampl*sine_val
 }
 
+//init()
 
 proc pp() {
 	spac_fq_deg = $1 //fq in cpd
@@ -67,7 +72,7 @@ proc pp() {
 	soma_original = soma.diam
 	soma.diam = soma_original*soma_multiplier
 
-	init()
+	//init()
 	advance()
 	run()
 

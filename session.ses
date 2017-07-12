@@ -1,6 +1,5 @@
 tstop_val = 500
 
-
 {load_file("nrngui.hoc")}
 objectvar save_window_, rvp_
 objectvar scene_vector_[4]
@@ -14,11 +13,10 @@ scene_vector_[2] = save_window_
 {save_window_.view(0, -125.392, tstop_val, 191.083, 35, 8, 1262.4, 310.72)}
 graphList[0].append(save_window_)
 save_window_.save_name("graphList[0].")
-save_window_.addexpr("v(.5)", 1, 1, 0.8, 0.9, 2)
+save_window_.addexpr("v(.5)", 7, 1, 0.8, 0.9, 2)
 save_window_.addexpr("axon.v( 0.00140449 )", 2, 1, 0.8, 0.9, 2)
 save_window_.addexpr("dend[1].v( 0.5 )", 5, 1, 0.8, 0.9, 2)
-save_window_.addexpr("dend[90].v( 0.5 )", 7, 1, 0.762738, 1.03594, 2)
-
+save_window_.addexpr("Iin*10", 4, 1, 0.8, 0.947519, 2)
 }
 {
 xpanel("RunControl", 0)
@@ -31,7 +29,7 @@ xvalue("Continue til","runStopAt", 1,"{continuerun(runStopAt) stoprun=1}", 1, 1 
 runStopIn = 1
 xvalue("Continue for","runStopIn", 1,"{continuerun(t + runStopIn) stoprun=1}", 1, 1 )
 xbutton("Single Step","steprun()")
-t = 329.36
+t = 0
 xvalue("t","t", 2 )
 tstop = tstop_val
 xvalue("Tstop","tstop", 1,"tstop_changed()", 0, 1 )
@@ -50,7 +48,7 @@ save_window_ = new PlotShape(0)
 save_window_.size(-271.108,495.808,-148.381,176.805)
 save_window_.variable("v")
 scene_vector_[3] = save_window_
-{save_window_.view(-271.108, -148.381, 766.917, 325.186, 345, 365, 1033.92, 438.4)}
+{save_window_.view(-286.89, -114.165, 639.097, 288.516, 4, 365, 971.52, 440.32)}
 fast_flush_list.append(save_window_)
 save_window_.exec_menu("Show Diam")
 save_window_.exec_menu("Shape Plot") // v depicted via colormap
