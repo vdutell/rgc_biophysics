@@ -1,6 +1,5 @@
 //Run parameters
 dt = 0.025
-//tstop = 0 //now called tstop_val
 dly = 1
 
 
@@ -8,7 +7,7 @@ dly = 1
 objref siclamp
 soma siclamp = new IClamp(0.5)
 siclamp.amp = 0 // units n
-siclamp.dur = tstop_val // units ms
+siclamp.dur = tstop // units ms
 siclamp.del = dly // units ms
 
 
@@ -20,7 +19,7 @@ forsec dends {
 	thisone = new SectionRef()
 	thisone diclamp[id] = new IClamp(0.5)
 	diclamp[id].amp = 0 // units n
-	diclamp[id].dur = tstop_val // units ms
+	diclamp[id].dur = tstop// units ms
 	diclamp[id].del = dly // units ms
 	id+=1
 }
@@ -52,7 +51,8 @@ proc advance() {
  	fadvance()
  	time_delayed = t-siclamp.del
 
- 	dends for i=0,n3d()-1{
+ 	dends{ //for i=0,n3d()-1{
+ 		i=0
  		xcoord = x3d(i)
  		sine_val = calc_sin(xcoord,t)
  		dend[i] diclamp.amp = ampl+ampl*sine_val
@@ -72,7 +72,7 @@ proc pp() {
 	soma_original = soma.diam
 	soma.diam = soma_original*soma_multiplier
 
-	//init()
+	init()
 	advance()
 	run()
 
