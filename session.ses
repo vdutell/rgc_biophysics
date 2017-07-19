@@ -1,4 +1,4 @@
-tstop_val = 500
+tstop=1500
 
 {load_file("nrngui.hoc")}
 objectvar save_window_, rvp_
@@ -8,15 +8,15 @@ objectvar ocbox_, ocbox_list_, scene_, scene_list_
 {pwman_place(0,0,0)}
 {
 save_window_ = new Graph(0)
-save_window_.size(0,tstop_val,-125.392,65.691)
+save_window_.size(0,tstop,-125.392,65.691)
 scene_vector_[2] = save_window_
-{save_window_.view(0, -125.392, tstop_val, 191.083, 35, 8, 1262.4, 310.72)}
+{save_window_.view(0, -125.392, tstop, 191.083, 35, 8, 1262.4, 310.72)}
 graphList[0].append(save_window_)
 save_window_.save_name("graphList[0].")
 save_window_.addexpr("v(.5)", 7, 1, 0.8, 0.9, 2)
 save_window_.addexpr("axon.v( 0.00140449 )", 2, 1, 0.8, 0.9, 2)
 save_window_.addexpr("dend[1].v( 0.5 )", 5, 1, 0.8, 0.9, 2)
-save_window_.addexpr("Iin*10", 4, 1, 0.8, 0.947519, 2)
+save_window_.addexpr("Iin*10", 4, 2, 0.8, 0.947519, 2)
 }
 {
 xpanel("RunControl", 0)
@@ -31,7 +31,6 @@ xvalue("Continue for","runStopIn", 1,"{continuerun(t + runStopIn) stoprun=1}", 1
 xbutton("Single Step","steprun()")
 t = 0
 xvalue("t","t", 2 )
-tstop = tstop_val
 xvalue("Tstop","tstop", 1,"tstop_changed()", 0, 1 )
 dt = 0.025
 xvalue("dt","dt", 1,"setdt()", 0, 1 )
