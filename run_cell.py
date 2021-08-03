@@ -14,13 +14,13 @@ h.load_file('stdrun.hoc')
 #cell_conduct = h.load_file('rgc_conduct.hoc')
 
 # set timing properties of cell stimulation
-stim_fq_hz = 10
+stim_fq_hz = 100
 stim_fq_amp = 10
-dt_ms = 25.
-dur_sec = 0.1
-timesteps = int(dur_sec * 1000. / dt_ms)
+dt_ms = 0.01
+dur_ms = 100
+timesteps = int(dur_ms / dt_ms)
 #get time and stim vector
-time_vec, stim_vec = utils.calc_temporal_sin(stim_fq_hz, dur_sec, timesteps, stim_fq_amp)
+time_vec, stim_vec = utils.calc_temporal_sin(stim_fq_hz, dur_ms, timesteps, stim_fq_amp)
 
 #create current clamp
 def create_stim(soma_size_multiplier=1):
@@ -40,16 +40,29 @@ def create_stim(soma_size_multiplier=1):
     t = h.Vector().record(h._ref_t)
 
     h.finitialize(-65 * mV)
-    h.continuerun(dur_sec * ms * 1000)
+    h.continuerun(dur_ms * ms)
     
     return(t, soma_v)
 
+#midget_t_tenth, midget_v_tenth = create_stim(soma_size_multiplier=0.1)
+midget_t_half, midget_v_half = create_stim(soma_size_multiplier=0.5)
 midget_t, midget_v = create_stim(soma_size_multiplier=1)
 midget_t_2x, midget_v_2x = create_stim(soma_size_multiplier=2)
 midget_t_10x, midget_v_10x = create_stim(soma_size_multiplier=10)
 
 
-#plot result
+#plot resuls
+
+plt.figure(figsize=(10,10))
+
+plt.subplot(2,1,1)
+plt.plot(time_vec, stim_vec,'.')
+plt.xlabel('Time (ms)')
+plt.ylabel('Current (Amps)')
+plt.title('Current Stimulation')
+plt.subplot(2,1,2)
+#plt.plot(midget_t_tenth, midget_v_tenth, label='soma 0.1x')
+plt.plot(midget_t_half, midget_v_half, label='soma 0.5x')
 plt.plot(midget_t, midget_v, label='soma 1x')
 plt.plot(midget_t_2x, midget_v_2x, label='soma 2x')
 plt.plot(midget_t_10x, midget_v_10x, label='soma 10x')

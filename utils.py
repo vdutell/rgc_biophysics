@@ -2,22 +2,22 @@ import numpy as np
 from neuron import h
 from neuron.units import ms, mV
 
-def calc_temporal_sin(temp_fq_hz, len_s, n_timepoints, amplitude):
+def calc_temporal_sin(temp_fq_hz, len_ms, n_timepoints, amplitude):
     '''
     Function to calculate a temporal sine wave for neuron stimluation
 
     Input:
         temp_fq_hz (int): Temporal frequency at which to modulate sime wave
-        len_s (int): Length of stimulation in seconds
+        len_ms (int): Length of stimulation in miliseconds
         n_timepoints (int): Number of timepoints
         amplitude (int): Amplitude of stimulation
     Returns:
         timepoints (1D numpy array): Timepoint vector
-        sin_stim_vec (1D numpy array, float32): Sine wave stim vector of stim values
+        sin_stim_vec (1D numpy array, float32): Sine wave stim vector of stim values (in seconds)
     '''
 
-    timepoints = np.linspace(0, len_s, n_timepoints)
-    sin_stim_vec = np.sin(2*np.pi*(temp_fq_hz * timepoints)) #calculate sine wave
+    timepoints = np.linspace(0, len_ms, n_timepoints)
+    sin_stim_vec = np.sin(2*np.pi*(temp_fq_hz/1000. * timepoints))*amplitude #calculate sine wave
     return(timepoints, sin_stim_vec)
 
 # h.load_file('rgc_alpha_noax.hoc')
