@@ -4,7 +4,7 @@ from neuron.units import ms, mV
 import matplotlib.pyplot as plt
 
 h.load_file('stdrun.hoc')
-
+h.load_file('import3d.hoc')
 
 # load morphology and conductance properties from .hoc file
 #cell_conduct_fname = 'rgc_conduct.hoc'
@@ -22,13 +22,21 @@ timesteps = int(dur_ms / dt_ms)
 #get time and stim vector
 time_vec, stim_vec = utils.calc_temporal_sin(stim_fq_hz, dur_ms, timesteps, stim_fq_amp)
 
+#morphology files from http://neuromorpho.org/KeywordResult.jsp?count=47&keywords=%22Kantor_Szarka%22, classified as M/P using method from https://pubmed.ncbi.nlm.nih.gov/1374766/
+parasol_fname = '160107_B5_1.CNG.swc' #M (Magno)
+midget_fname = '160107_B6_4.CNG.swc' #P (Parvo)
+
 #create current clamp
-def create_stim(soma_size_multiplier=1):
+def create_stim(morph_fname, soma_size_multiplier=1):
     #specify cell
-    #my_cell = utils.RGC('rgc_alpha_noax.hoc', 0)
-    my_cell = utils.BallAndStick(0, soma_size_multiplier)
-    #create current clamp - midget cell
-    stim = h.IClamp(my_cell.dend(1))
+    #my_cell = h.Import3d_SWC_read()
+    #my_cell.input(morph_fname)
+    #print(my_cell.axon)
+    my_cell = utils.RGC(morph_fname, 0)
+    stim = h.IClamp(my_cell.dends[1])
+    #my_cell = utils.BallAndStick(0, soma_size_multiplier)
+    #stim = h.IClamp(my_cell.dend(1))
+    #set stim params - defaults for defining stim vector
     stim.delay = 0
     stim.dur = 1e9
     VecTime = h.Vector(time_vec)
@@ -45,10 +53,10 @@ def create_stim(soma_size_multiplier=1):
     return(t, soma_v)
 
 #midget_t_tenth, midget_v_tenth = create_stim(soma_size_multiplier=0.1)
-midget_t_half, midget_v_half = create_stim(soma_size_multiplier=0.5)
-midget_t, midget_v = create_stim(soma_size_multiplier=1)
-midget_t_2x, midget_v_2x = create_stim(soma_size_multiplier=2)
-midget_t_10x, midget_v_10x = create_stim(soma_size_multiplier=10)
+midget_t_half, midget_v_half = create_stim(parasol_fname, soma_size_multiplier=0.5)
+midget_t, midget_v = create_stim(midget_fname, 1)
+midget_t_2x, midget_v_2x = create_stim(parasol_fname,soma_size_multiplier=2)
+midget_t_10x, midget_v_10x = create_stim(parasol_fname,soma_size_multiplier=10)
 
 
 #plot resuls
