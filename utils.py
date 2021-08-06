@@ -36,15 +36,7 @@ class RGC:
         #self._setup_biophysics() #need to debug this, why are realistic ion channels from .mod files not working?
         self._setup_biophysics_hh()
     def _setup_morphology(self):
-
-
-#         self.soma = h.Section(name='soma', cell=self)
-#         self.dend1 = h.Section(name='dend1', cell=self)
-#         self.dend2 = h.Section(name='dend2', cell=self)
-#         self.all = [self.soma, self.dend1, self.dend2]
-#         self.dend1.connect(self.soma)
-#         self.dend2.connect(self.soma)
-        
+        #read in SWC file
         self.cell = h.Import3d_SWC_read()
         self.cell.input(self.morph_fname)
         i3d = h.Import3d_GUI(self.cell, 0)
@@ -58,7 +50,6 @@ class RGC:
         #for sec in self.all:
         #    sec.Ra = 100    # Axial resistance in Ohm * cm
         #    sec.cm = 1      # Membrane capacitance in micro Farads / cm^2
-        #self.soma.insert('hh')
         for sec in self.somalist:
             sec.insert('hh')
             #print(dir(seg))

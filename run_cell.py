@@ -14,7 +14,7 @@ h.load_file('import3d.hoc')
 #cell_conduct = h.load_file('rgc_conduct.hoc')
 
 # set timing properties of cell stimulation
-stim_fq_hz = 100
+stim_fq_hz = 140
 stim_fq_mamp = 100.
 dt_ms = 0.01
 dur_ms = 50
@@ -53,59 +53,60 @@ def create_stim(morph_fname, soma_size_multiplier=1):
     return(t, soma_v)
 
 #midget_t_tenth, midget_v_tenth = create_stim(soma_size_multiplier=0.1)
-midget_t_half, midget_v_half = create_stim(midget_fname, soma_size_multiplier=0.5)
-midget_t, midget_v = create_stim(midget_fname, 1)
-midget_t_2x, midget_v_2x = create_stim(midget_fname,soma_size_multiplier=2)
-midget_t_10x, midget_v_10x = create_stim(midget_fname,soma_size_multiplier=10)
+#midget_t_half, midget_v_half = create_stim(midget_fname, soma_size_multiplier=0.5)
+midget_t_p83, midget_v_p83 = create_stim(midget_fname, soma_size_multiplier=0.833)
+midget_t, midget_v = create_stim(midget_fname, soma_size_multiplier=1)
+midget_t_1p1, midget_v_1p1 = create_stim(midget_fname,soma_size_multiplier=1.1)
+midget_t_1p2, midget_v_1p2 = create_stim(midget_fname,soma_size_multiplier=1.2)
+midget_t_1p5, midget_v_1p5 = create_stim(midget_fname,soma_size_multiplier=1.5)
+#midget_t_10x, midget_v_10x = create_stim(midget_fname,soma_size_multiplier=10)
 
 
-parasol_t_half, parasol_v_half = create_stim(parasol_fname, soma_size_multiplier=0.5)
-parasol_t, parasol_v = create_stim(parasol_fname, 1)
-parasol_t_2x, parasol_v_2x = create_stim(parasol_fname,soma_size_multiplier=2)
-parasol_t_10x, parasol_v_10x = create_stim(parasol_fname,soma_size_multiplier=10)
+#parasol_t_half, parasol_v_half = create_stim(parasol_fname, soma_size_multiplier=0.5)
+parasol_t_p83, parasol_v_p83 = create_stim(parasol_fname, soma_size_multiplier=0.833)
+parasol_t, parasol_v = create_stim(parasol_fname, soma_size_multiplier=1)
+parasol_t_1p1, parasol_v_1p1 = create_stim(parasol_fname,soma_size_multiplier=1.1)
+parasol_t_1p2, parasol_v_1p2 = create_stim(parasol_fname,soma_size_multiplier=1.2)
+parasol_t_1p5, parasol_v_1p5 = create_stim(parasol_fname,soma_size_multiplier=1.5)
+#parasol_t_2x, parasol_v_2x = create_stim(parasol_fname,soma_size_multiplier=2)
+#parasol_t_10x, parasol_v_10x = create_stim(parasol_fname,soma_size_multiplier=10)
 
 
 #plot resuls
-
-plt.figure(figsize=(10,10))
-plt.subplot(2,1,1)
+plt.figure(figsize=(8,12))
+plt.subplot(3,1,1)
 plt.plot(time_vec, stim_vec,'.')
 plt.xlabel('Time (ms)')
 plt.ylabel('Current (mAmps)')
 plt.title('Current Stimulation')
-plt.subplot(2,1,2)
-#plt.plot(midget_t_tenth, midget_v_tenth, label='soma 0.1x')
-plt.plot(midget_t_half, midget_v_half, label='soma 0.5x')
+
+plt.subplot(3,1,2)
+#plt.plot(midget_t_half, midget_v_half, label='soma 0.5x')
+plt.plot(midget_t_p83, midget_v_p83, label='soma 0.833x')
 plt.plot(midget_t, midget_v, label='soma 1x')
-plt.plot(midget_t_2x, midget_v_2x, label='soma 2x')
-plt.plot(midget_t_10x, midget_v_10x, label='soma 10x')
+plt.plot(midget_t_1p1, midget_v_1p1, label='soma 1.1x')
+plt.plot(midget_t_1p1, midget_v_1p2, label='soma 1.2x')
+plt.plot(midget_t_1p5, midget_v_1p5, label='soma 1.5x')
+#plt.plot(midget_t_2x, midget_v_2x, label='soma 2x')
+#plt.plot(midget_t_10x, midget_v_10x, label='soma 10x')
 plt.xlabel('Time (ms)')
 plt.ylabel('Soma Voltage (mV)')
 plt.title(f'Midget Response to Sine Wave at {stim_fq_hz} Hz, {stim_fq_mamp} mA')
 plt.legend()
-plt.savefig(f'midget_soma_voltage_{stim_fq_hz}hz_{stim_fq_mamp}Amps.png')
-#plt.show()
 
-
-
-plt.figure(figsize=(10,10))
-plt.subplot(2,1,1)
-plt.plot(time_vec, stim_vec,'.')
-plt.xlabel('Time (ms)')
-plt.ylabel('Current (mAmps)')
-plt.title('Current Stimulation')
-plt.subplot(2,1,2)
-#plt.plot(midget_t_tenth, midget_v_tenth, label='soma 0.1x')
-plt.plot(parasol_t_half, parasol_v_half, label='soma 0.5x')
+plt.subplot(3,1,3)
+plt.plot(parasol_t_p83, parasol_v_p83, label='soma 0.833x')
 plt.plot(parasol_t, parasol_v, label='soma 1x')
-plt.plot(parasol_t_2x, parasol_v_2x, label='soma 2x')
-plt.plot(parasol_t_10x, parasol_v_10x, label='soma 10x')
+plt.plot(parasol_t_1p1, parasol_v_1p1, label='soma 1.1x')
+plt.plot(parasol_t_1p1, parasol_v_1p2, label='soma 1.2x')
+plt.plot(parasol_t_1p5, parasol_v_1p5, label='soma 1.5x')
 plt.xlabel('Time (ms)')
 plt.ylabel('Soma Voltage (mV)')
 plt.title(f'Parasol Response to Sine Wave at {stim_fq_hz} Hz, {stim_fq_mamp} mA')
 plt.legend()
-plt.savefig(f'parasol_soma_voltage_{stim_fq_hz}hz_{stim_fq_mamp}Amps.png')
-#plt.show()
+plt.tight_layout()
+plt.savefig(f'soma_voltage_{stim_fq_hz}hz_{stim_fq_mamp}Amps.png')
+
 
 
 #print(time_vec, stim_vec)
