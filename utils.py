@@ -14,7 +14,7 @@ def calc_temporal_sin(temp_fq_hz, len_ms, n_timepoints, amplitude):
         temp_fq_hz (int): Temporal frequency at which to modulate sime wave
         len_ms (int): Length of stimulation in miliseconds
         n_timepoints (int): Number of timepoints
-        amplitude (int): Amplitude of stimulation
+        amplitude (int): Amplitude of stimulation (Amps)
     Returns:
         timepoints (1D numpy array): Timepoint vector
         sin_stim_vec (1D numpy array, float32): Sine wave stim vector of stim values (in seconds)
@@ -28,10 +28,11 @@ def calc_temporal_sin(temp_fq_hz, len_ms, n_timepoints, amplitude):
 
 # #specify cell from morphology and conductance files
 class RGC:
-    def __init__(self, morph_fname, gid, soma_size_multiplier):
+    def __init__(self, morph_fname, gid, soma_size_multiplier, dend_size_multiplier):
         self._gid = gid
         self.morph_fname = morph_fname
         self.soma_size_multiplier = soma_size_multiplier
+        self.dend_depth_multiplier = dend_size_multiplier
         self._setup_morphology()
         #self._setup_biophysics() #need to debug this, why are realistic ion channels from .mod files not working?
         self._setup_biophysics_hh()
@@ -53,22 +54,27 @@ class RGC:
         for sec in self.somalist:
             sec.insert('hh')
             #print(dir(seg))
+            self.soma = sec
+            self.soma.L = self.soma.diam = self.soma.diam * self.soma_size_multiplier
             for seg in sec:
                 seg.hh.gnabar = 0.12  # Sodium conductance in S/cm2
                 seg.hh.gkbar = 0.036  # Potassium conductance in S/cm2
                 seg.hh.gl = 0.0003    # Leak conductance in S/cm2
                 seg.hh.el = -54.3     # Reversal potential in mV
-            self.soma = sec
-            self.soma.L = self.soma.diam = 200 * self.soma_size_multiplier 
-        # Insert passive current in the dendrite                       # <-- NEW
+
+        # Insert passive current in the dendrite 
         for sec in self.dendslist:  
             sec.insert('hh')# <-- NEW
+            sec.L = sec.diam * self.dend_depth_multiplier 
             for seg in sec:
                 seg.hh.gnabar = 0.12  # Sodium conductance in S/cm2
                 seg.hh.gkbar = 0.036  # Potassium conductance in S/cm2
                 seg.hh.gl = 0.0003    # Leak conductance in S/cm2
                 seg.hh.el = -54.3     # Reversal potential in mV
+
                 self.apicaldend = seg
+
+                
 
 #     def _setup_biophysics(self):
 #         #properties common to all sections

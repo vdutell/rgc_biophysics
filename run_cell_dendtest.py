@@ -14,25 +14,25 @@ h.load_file('import3d.hoc')
 #cell_conduct = h.load_file('rgc_conduct.hoc')
 
 # set timing properties of cell stimulation
-stim_fq_hz = 140
-stim_fq_mamp = 100.
+stim_fq_hz = 130
+stim_fq_amp = 1
 dt_ms = 0.01
 dur_ms = 50
 timesteps = int(dur_ms / dt_ms)
 #get time and stim vector
-time_vec, stim_vec = utils.calc_temporal_sin(stim_fq_hz, dur_ms, timesteps, stim_fq_mamp)
+time_vec, stim_vec = utils.calc_temporal_sin(stim_fq_hz, dur_ms, timesteps, stim_fq_amp)
 
 #morphology files from http://neuromorpho.org/KeywordResult.jsp?count=47&keywords=%22Kantor_Szarka%22, classified as M/P using method from https://pubmed.ncbi.nlm.nih.gov/1374766/
 parasol_fname = '160107_B5_1.CNG.swc' #M (Magno)
 midget_fname = '160107_B6_4.CNG.swc' #P (Parvo)
 
 #create current clamp
-def create_stim(morph_fname, soma_size_multiplier=1):
+def create_stim(morph_fname, soma_size_multiplier=1, dend_size_multiplier=1):
     #specify cell
     #my_cell = h.Import3d_SWC_read()
     #my_cell.input(morph_fname)
     #print(my_cell.axon)
-    my_cell = utils.RGC(morph_fname, 0, soma_size_multiplier)
+    my_cell = utils.RGC(morph_fname, 0, soma_size_multiplier, dend_size_multiplier)
     stim = h.IClamp(my_cell.apicaldend) # grab furthest dendrite
     #my_cell = utils.BallAndStick(0, soma_size_multiplier)
     #stim = h.IClamp(my_cell.dend(1))
@@ -54,20 +54,20 @@ def create_stim(morph_fname, soma_size_multiplier=1):
 
 #midget_t_tenth, midget_v_tenth = create_stim(soma_size_multiplier=0.1)
 #midget_t_half, midget_v_half = create_stim(midget_fname, soma_size_multiplier=0.5)
-midget_t_p83, midget_v_p83 = create_stim(midget_fname, soma_size_multiplier=0.833)
-midget_t, midget_v = create_stim(midget_fname, soma_size_multiplier=1)
-midget_t_1p1, midget_v_1p1 = create_stim(midget_fname,soma_size_multiplier=1.1)
-midget_t_1p2, midget_v_1p2 = create_stim(midget_fname,soma_size_multiplier=1.2)
-midget_t_1p5, midget_v_1p5 = create_stim(midget_fname,soma_size_multiplier=1.5)
+midget_t_p83, midget_v_p83 = create_stim(midget_fname, dend_size_multiplier=0.833)
+midget_t, midget_v = create_stim(midget_fname, dend_size_multiplier=1)
+midget_t_1p1, midget_v_1p1 = create_stim(midget_fname,dend_size_multiplier=1.1)
+midget_t_1p2, midget_v_1p2 = create_stim(midget_fname,dend_size_multiplier=1.2)
+midget_t_1p5, midget_v_1p5 = create_stim(midget_fname,dend_size_multiplier=1.5)
 #midget_t_10x, midget_v_10x = create_stim(midget_fname,soma_size_multiplier=10)
 
 
 #parasol_t_half, parasol_v_half = create_stim(parasol_fname, soma_size_multiplier=0.5)
-parasol_t_p83, parasol_v_p83 = create_stim(parasol_fname, soma_size_multiplier=0.833)
-parasol_t, parasol_v = create_stim(parasol_fname, soma_size_multiplier=1)
-parasol_t_1p1, parasol_v_1p1 = create_stim(parasol_fname,soma_size_multiplier=1.1)
-parasol_t_1p2, parasol_v_1p2 = create_stim(parasol_fname,soma_size_multiplier=1.2)
-parasol_t_1p5, parasol_v_1p5 = create_stim(parasol_fname,soma_size_multiplier=1.5)
+parasol_t_p83, parasol_v_p83 = create_stim(parasol_fname, dend_size_multiplier=0.833)
+parasol_t, parasol_v = create_stim(parasol_fname, dend_size_multiplier=1)
+parasol_t_1p1, parasol_v_1p1 = create_stim(parasol_fname, dend_size_multiplier=1.1)
+parasol_t_1p2, parasol_v_1p2 = create_stim(parasol_fname, dend_size_multiplier=1.2)
+parasol_t_1p5, parasol_v_1p5 = create_stim(parasol_fname, dend_size_multiplier=1.5)
 #parasol_t_2x, parasol_v_2x = create_stim(parasol_fname,soma_size_multiplier=2)
 #parasol_t_10x, parasol_v_10x = create_stim(parasol_fname,soma_size_multiplier=10)
 
@@ -77,35 +77,35 @@ plt.figure(figsize=(8,12))
 plt.subplot(3,1,1)
 plt.plot(time_vec, stim_vec,'.')
 plt.xlabel('Time (ms)')
-plt.ylabel('Current (mAmps)')
+plt.ylabel('Current (Amps)')
 plt.title('Current Stimulation')
 
 plt.subplot(3,1,2)
 #plt.plot(midget_t_half, midget_v_half, label='soma 0.5x')
-plt.plot(midget_t_p83, midget_v_p83, label='soma 0.833x')
-plt.plot(midget_t, midget_v, label='soma 1x')
-plt.plot(midget_t_1p1, midget_v_1p1, label='soma 1.1x')
-plt.plot(midget_t_1p1, midget_v_1p2, label='soma 1.2x')
-plt.plot(midget_t_1p5, midget_v_1p5, label='soma 1.5x')
+plt.plot(midget_t_p83, midget_v_p83, label='dend 0.833x')
+plt.plot(midget_t, midget_v, label='dend 1x')
+plt.plot(midget_t_1p1, midget_v_1p1, label='dend 1.1x')
+plt.plot(midget_t_1p1, midget_v_1p2, label='dend 1.2x')
+plt.plot(midget_t_1p5, midget_v_1p5, label='dend 1.5x')
 #plt.plot(midget_t_2x, midget_v_2x, label='soma 2x')
 #plt.plot(midget_t_10x, midget_v_10x, label='soma 10x')
 plt.xlabel('Time (ms)')
 plt.ylabel('Soma Voltage (mV)')
-plt.title(f'Midget Response to Sine Wave at {stim_fq_hz} Hz, {stim_fq_mamp} mA')
+plt.title(f'Midget Response to Sine Wave at {stim_fq_hz} Hz, {stim_fq_amp} A')
 plt.legend()
 
 plt.subplot(3,1,3)
-plt.plot(parasol_t_p83, parasol_v_p83, label='soma 0.833x')
-plt.plot(parasol_t, parasol_v, label='soma 1x')
-plt.plot(parasol_t_1p1, parasol_v_1p1, label='soma 1.1x')
-plt.plot(parasol_t_1p1, parasol_v_1p2, label='soma 1.2x')
-plt.plot(parasol_t_1p5, parasol_v_1p5, label='soma 1.5x')
+plt.plot(parasol_t_p83, parasol_v_p83, label='dend 0.833x')
+plt.plot(parasol_t, parasol_v, label='dend 1x')
+plt.plot(parasol_t_1p1, parasol_v_1p1, label='dend 1.1x')
+plt.plot(parasol_t_1p1, parasol_v_1p2, label='dend 1.2x')
+plt.plot(parasol_t_1p5, parasol_v_1p5, label='dend 1.5x')
 plt.xlabel('Time (ms)')
 plt.ylabel('Soma Voltage (mV)')
-plt.title(f'Parasol Response to Sine Wave at {stim_fq_hz} Hz, {stim_fq_mamp} mA')
+plt.title(f'Parasol Response to Sine Wave at {stim_fq_hz} Hz, {stim_fq_amp} A')
 plt.legend()
 plt.tight_layout()
-plt.savefig(f'soma_voltage_{stim_fq_hz}hz_{stim_fq_mamp}Amps.png')
+plt.savefig(f'soma_voltage_{stim_fq_hz}hz_{stim_fq_amp}Amps_dendtest.png')
 
 
 
