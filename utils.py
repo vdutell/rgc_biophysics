@@ -48,29 +48,40 @@ class RGC:
         self.all = h.SectionList(s for s in h.allsec())
         #self.all = [self.soma, self.dends]
     def _setup_biophysics_hh(self):
-        #for sec in self.all:
-        #    sec.Ra = 100    # Axial resistance in Ohm * cm
-        #    sec.cm = 1      # Membrane capacitance in micro Farads / cm^2
+        '''Biophysical values for hRGCs from The effect of 
+        morphology upon electrophysiological
+        responses of retinal ganglion cells: simulation results
+        Matias I. Maturana · Tatiana Kameneva ·
+        Anthony N. Burkitt · Hamish Meffin ·
+        David B. Grayden'''
+        for sec in self.all:
+            sec.Ra = 110    # Axial resistance in Ohm * cm
+            sec.cm = 1      # Membrane capacitance in micro Farads / cm^2
+            #sec.ena = 35.
+            #sec.ek = -75
+            
         for sec in self.somalist:
             sec.insert('hh')
             #print(dir(seg))
             self.soma = sec
             self.soma.L = self.soma.diam = self.soma.diam * self.soma_size_multiplier
             for seg in sec:
-                seg.hh.gnabar = 0.12  # Sodium conductance in S/cm2
-                seg.hh.gkbar = 0.036  # Potassium conductance in S/cm2
-                seg.hh.gl = 0.0003    # Leak conductance in S/cm2
-                seg.hh.el = -54.3     # Reversal potential in mV
+                seg.hh.gnabar = 0.08  # Sodium conductance in S/cm2
+                seg.hh.gkbar = 0.018  # Potassium conductance in S/cm2
+                seg.hh.gl = 15*8e-6    # Leak conductance in S/cm2
+                #seg.hh.gcabar = 0.0015
+                seg.hh.el = -60.     # Reversal potential in mV
 
         # Insert passive current in the dendrite 
         for sec in self.dendslist:  
             sec.insert('hh')# <-- NEW
             sec.L = sec.diam * self.dend_depth_multiplier 
             for seg in sec:
-                seg.hh.gnabar = 0.12  # Sodium conductance in S/cm2
-                seg.hh.gkbar = 0.036  # Potassium conductance in S/cm2
-                seg.hh.gl = 0.0003    # Leak conductance in S/cm2
-                seg.hh.el = -54.3     # Reversal potential in mV
+                seg.hh.gnabar = 0.025  # Sodium conductance in S/cm2
+                seg.hh.gkbar = 0.012  # Potassium conductance in S/cm2
+                seg.hh.gl = 15*8e-6     # Leak conductance in S/cm2
+                #seg.hh.gcabar = 0.002
+                seg.hh.el = -60.    # Reversal potential in mV
 
                 self.apicaldend = seg
 
